@@ -1,0 +1,10 @@
+{
+  "type": "mysql",
+  "host": "111.67.207.249",
+  "username": "bsr_server",
+  "password": "wdXFai3Ese2G7sB3",
+  "database": "bsr_server",
+  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "synchronize": true,
+  "autoLoadEntities": true
+}
