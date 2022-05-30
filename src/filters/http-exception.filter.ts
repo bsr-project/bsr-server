@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import {
   ArgumentsHost,
   Catch,
@@ -15,9 +16,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const message = exception.message
 
+    const code = _.get(exception, 'response.code', 1)
+
     const errorResponse = {
-      data: null,
-      code: 1,
+      code,
       message,
       url: request.originalUrl
     }
