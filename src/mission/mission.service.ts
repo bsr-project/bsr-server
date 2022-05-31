@@ -120,7 +120,19 @@ export class MissionService {
     return null
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} mission`
+  async remove(id: number) {
+    const missionList = await this.missionRepository.findBy({
+      mission_pid: id
+    })
+
+    // 删除子任务
+    for await (const mission of missionList) {
+      this.missionRepository.delete({ mission_id: mission.mission_id })
+    }
+
+    // 删除主任务
+    this.missionRepository.delete({ mission_id: id })
+
+    return null
   }
 }
