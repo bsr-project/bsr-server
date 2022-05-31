@@ -19,8 +19,19 @@ export class MissionService {
     private missionRepository: Repository<Mission>
   ) {}
 
-  create(createMissionDto: CreateMissionDto) {
-    return createMissionDto
+  async create(createMissionDto: CreateMissionDto) {
+    // 主任务
+    const result = await this.missionRepository.insert(createMissionDto)
+
+    if (createMissionDto.children.length > 0) {
+      const mission_id = _.get(result.identifiers, '0.mission_id')
+      for await (const item of createMissionDto.children as CreateMissionDto[]) {
+        item.mission_pid = mission_id
+        this.missionRepository.insert(item)
+      }
+    }
+
+    return result.identifiers
   }
 
   async findAll() {

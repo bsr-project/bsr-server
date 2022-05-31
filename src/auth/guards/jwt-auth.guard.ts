@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport'
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  handleRequest(err, user) {
+  handleRequest(err: any, user: any) {
     if (err || !user) {
       throw new UnauthorizedException({
         message: '登录已过期',
