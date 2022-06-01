@@ -29,7 +29,17 @@ export class UserService {
   }
 
   findOne(id: number) {
-    return this.userRepository.findOneBy({ id })
+    return this.userRepository.findOne({
+      select: [
+        'id',
+        'username',
+        'realname',
+        'mobile',
+        'bsr_code',
+        'car_number'
+      ],
+      where: { id }
+    })
   }
 
   findOneByName(username: string) {

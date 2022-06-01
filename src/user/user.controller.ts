@@ -6,12 +6,16 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards
+  UseGuards,
+  Request,
+  HttpException,
+  HttpStatus
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'
+import * as _ from 'lodash'
 
 @Controller('user')
 export class UserController {
@@ -28,9 +32,16 @@ export class UserController {
     return this.userService.findAll()
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id)
+  findOne(@Request() req) {
+    const id = _.get(req.user, 'id')
+
+    if (!id) {
+      throw new HttpException('未知错误 user', HttpStatus.OK)
+    }
+
+    return this.userService.findOne(id)
   }
 
   @Patch(':id')
