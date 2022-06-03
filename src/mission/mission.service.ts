@@ -148,7 +148,6 @@ export class MissionService {
         item.created_at = date
         item.updated_at = date
       })
-      console.log(createSubMission)
       this.missionRepository.insert(createSubMission)
     }
 
