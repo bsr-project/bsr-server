@@ -72,6 +72,59 @@ export class MissionService {
     }
   }
 
+  /**
+   * 获取所有有效的任务
+   *
+   * 任务 action_date 大于当前日期的任务
+   */
+  async findAllActive() {
+    const lists = await this.missionRepository
+      .createQueryBuilder('mission')
+      .select([
+        'mission.mission_id',
+        'mission.mission_pid',
+        'mission.title',
+        'mission.content',
+        'mission.location',
+        'mission.recruit',
+        'mission.action_date',
+        'mission.start_time',
+        'mission.end_time'
+      ])
+      .where('mission.action_date >= :date', {
+        date: moment().format('YYYY-MM-DD')
+      })
+      .getMany()
+
+    // 取出子级
+    for await (const item of lists) {
+      // 任务开始日期与今天相差天数
+      item['diff'] = moment(item.action_date).diff(
+        moment().format('YYYY-MM-DD'),
+        'days'
+      )
+
+      item['children'] = await this.missionRepository.find({
+        select: [
+          'mission_id',
+          'mission_pid',
+          'title',
+          'content',
+          'location',
+          'recruit',
+          'action_date',
+          'start_time',
+          'end_time'
+        ],
+        where: {
+          mission_pid: item.mission_id
+        }
+      })
+    }
+
+    return lists
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} mission`
   }

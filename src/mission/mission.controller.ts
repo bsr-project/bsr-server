@@ -29,6 +29,12 @@ export class MissionController {
     return this.missionService.findAll()
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('active')
+  findAllActive() {
+    return this.missionService.findAllActive()
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.missionService.findOne(+id)
