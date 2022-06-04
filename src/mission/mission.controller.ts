@@ -6,7 +6,8 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards
+  UseGuards,
+  Request
 } from '@nestjs/common'
 import { MissionService } from './mission.service'
 import { CreateMissionDto } from './dto/create-mission.dto'
@@ -31,8 +32,8 @@ export class MissionController {
 
   @UseGuards(JwtAuthGuard)
   @Get('active')
-  findAllActive() {
-    return this.missionService.findAllActive()
+  findAllActive(@Request() req: any) {
+    return this.missionService.findAllActive(req.user)
   }
 
   @Get(':id')

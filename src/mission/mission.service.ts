@@ -11,12 +11,16 @@ import { Mission } from './entities/mission.entity'
 
 import * as _ from 'lodash'
 import * as moment from 'moment'
+import { JoinMission } from '@/join-mission/entities/join-mission.entity'
+import { AuthUser } from '@/base/interfaces/AuthUserInterface'
 
 @Injectable()
 export class MissionService {
   constructor(
     @InjectRepository(Mission)
-    private missionRepository: Repository<Mission>
+    private missionRepository: Repository<Mission>,
+    @InjectRepository(JoinMission)
+    private joinMissionRepository: Repository<JoinMission>
   ) {}
 
   async create(createMissionDto: CreateMissionDto) {
@@ -64,6 +68,18 @@ export class MissionService {
           mission_pid: item.mission_id
         }
       })
+
+      _.forEach(item['children'] as CreateMissionDto[], (children) => {
+        children.start_time = moment(children.start_time).format(
+          'YYYY-MM-DD HH:mm:ss'
+        )
+        children.end_time = moment(children.end_time).format(
+          'YYYY-MM-DD HH:mm:ss'
+        )
+      })
+
+      item.start_time = moment(item.start_time).format('YYYY-MM-DD HH:mm:ss')
+      item.end_time = moment(item.end_time).format('YYYY-MM-DD HH:mm:ss')
     }
 
     return {
@@ -77,7 +93,7 @@ export class MissionService {
    *
    * 任务 action_date 大于当前日期的任务
    */
-  async findAllActive() {
+  async findAllActive(user: AuthUser) {
     const lists = await this.missionRepository
       .createQueryBuilder('mission')
       .select([
@@ -122,7 +138,39 @@ export class MissionService {
       })
     }
 
-    return lists
+    // 取出正在参加的任务
+    const activedMission = await this.joinMissionRepository.findOne({
+      select: [
+        'mission_id',
+        'submission_id',
+        'sign_in_time',
+        'sign_out_time',
+        'vehicle',
+        'status'
+      ],
+      where: {
+        user_id: user.id,
+        sign_out_time: null
+      }
+    })
+
+    const actived = activedMission
+      ? {
+          ...activedMission,
+          sign_in_time: moment(activedMission.sign_in_time).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
+          submission_id:
+            activedMission.submission_id.length > 0
+              ? _.split(activedMission.submission_id, ',')
+              : []
+        }
+      : null
+
+    return {
+      lists,
+      actived
+    }
   }
 
   findOne(id: number) {
