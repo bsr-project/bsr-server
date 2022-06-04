@@ -44,12 +44,12 @@ export class User {
   /**
    * 创建时间
    */
-  @Column({ type: 'varchar', length: 20, comment: '创建时间' })
+  @Column({ type: 'datetime', comment: '创建时间' })
   created_at: string
 
   /**
    * 最后更新时间
    */
-  @Column({ type: 'varchar', length: 20, comment: '最后更新时间' })
+  @Column({ type: 'datetime', comment: '最后更新时间' })
   updated_at: string
 }

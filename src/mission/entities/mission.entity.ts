@@ -39,29 +39,30 @@ export class Mission {
   /**
    * 任务日期 YYYY-MM-DD
    */
-  @Column({ type: 'date', nullable: true, comment: 'DD' }) action_date: string
+  @Column({ type: 'date', nullable: true, comment: '任务日期' })
+  action_date: string
 
   /**
    * 任务开始时间
    */
-  @Column({ type: 'varchar', length: 20, comment: '任务开始时间' })
+  @Column({ type: 'datetime', comment: '任务开始时间' })
   start_time: string
 
   /**
    * 任务结束时间
    */
-  @Column({ type: 'varchar', length: 20, comment: '任务结束时间' })
+  @Column({ type: 'datetime', comment: '任务结束时间' })
   end_time: string
 
   /**
    * 创建时间
    */
-  @Column({ type: 'varchar', length: 20, comment: '创建时间' })
+  @Column({ type: 'datetime', comment: '创建时间' })
   created_at: string
 
   /**
    * 最后更新时间
    */
-  @Column({ type: 'varchar', length: 20, comment: '最后更新时间' })
+  @Column({ type: 'datetime', comment: '最后更新时间' })
   updated_at: string
 }
