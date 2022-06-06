@@ -138,21 +138,29 @@ export class MissionService {
       })
     }
 
+    const nowDate = moment().format('YYYY-MM-DD')
+
     // 取出正在参加的任务
-    const activedMission = await this.joinMissionRepository.findOne({
-      select: [
-        'mission_id',
-        'submission_id',
-        'sign_in_time',
-        'sign_out_time',
-        'vehicle',
-        'status'
-      ],
-      where: {
-        user_id: user.id,
-        sign_out_time: null
-      }
-    })
+    const activedMission = await this.joinMissionRepository
+      .createQueryBuilder('j')
+      .select([
+        'j.mission_id',
+        'j.submission_id',
+        'j.sign_in_time',
+        'j.sign_out_time',
+        'j.vehicle',
+        'j.status'
+      ])
+      .where(
+        'j.user_id = :user_id AND status = :status AND j.created_at BETWEEN :start AND :end',
+        {
+          user_id: user.id,
+          status: 1,
+          start: `${nowDate} 00:00:00`,
+          end: `${nowDate} 23:59:59`
+        }
+      )
+      .getOne()
 
     const actived = activedMission
       ? {

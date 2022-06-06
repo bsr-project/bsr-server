@@ -81,11 +81,11 @@ export class JoinMission {
    * 创建时间
    */
   @Column({ type: 'datetime', comment: '创建时间' })
-  created_at: string
+  created_at: Date
 
   /**
    * 最后更新时间
    */
   @Column({ type: 'datetime', comment: '最后更新时间' })
-  updated_at: string
+  updated_at: Date
 }

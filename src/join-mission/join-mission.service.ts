@@ -27,9 +27,9 @@ export class JoinMissionService {
    */
   async signIn(user: AuthUser, createJoinMissionDto: CreateJoinMissionDto) {
     // 查找是否已签到
-    const activedMission = await this.findActivedMission(user)
+    const activedMissionCount = await this.findActivedMission(user)
 
-    if (activedMission.length > 0) {
+    if (activedMissionCount > 0) {
       throw new HttpException('当前还有未签退的任务', HttpStatus.OK)
     }
 
@@ -97,22 +97,31 @@ export class JoinMissionService {
 
   // 查找进行中的任务（未签退的任务）
   async findActivedMission(user: AuthUser) {
-    const joinedMission = await this.joinMissionRepository.find({
-      select: [
-        'join_id',
-        'mission_id',
-        'submission_id',
-        'sign_in_time',
-        'sign_out_time',
-        'status'
-      ],
-      where: {
-        user_id: user.id,
-        sign_out_time: null
-      }
-    })
+    const nowDate = moment().format('YYYY-MM-DD')
 
-    return joinedMission
+    // 取出正在参加的任务
+    const activedMissionCount = await this.joinMissionRepository
+      .createQueryBuilder('j')
+      .select([
+        'j.join_id',
+        'j.mission_id',
+        'j.submission_id',
+        'j.sign_in_time',
+        'j.sign_out_time',
+        'j.status'
+      ])
+      .where(
+        'j.user_id = :user_id AND status = :status AND j.created_at BETWEEN :start AND :end',
+        {
+          user_id: user.id,
+          status: 1,
+          start: `${nowDate} 00:00:00`,
+          end: `${nowDate} 23:59:59`
+        }
+      )
+      .getCount()
+
+    return activedMissionCount
   }
 
   async findOne(user: AuthUser, mission_id: number) {
