@@ -14,6 +14,8 @@ import * as moment from 'moment'
 import { JoinMission } from '@/join-mission/entities/join-mission.entity'
 import { AuthUser } from '@/base/interfaces/AuthUserInterface'
 
+import { JoinMissionStatus } from '@/join-mission/enums/JoinMissionStatusEnums'
+
 @Injectable()
 export class MissionService {
   constructor(
@@ -141,7 +143,7 @@ export class MissionService {
     const nowDate = moment().format('YYYY-MM-DD')
 
     // 取出正在参加的任务
-    const activedMission = await this.joinMissionRepository
+    const allActivedMissions = await this.joinMissionRepository
       .createQueryBuilder('j')
       .select([
         'j.mission_id',
@@ -151,16 +153,18 @@ export class MissionService {
         'j.vehicle',
         'j.status'
       ])
-      .where(
-        'j.user_id = :user_id AND status = :status AND j.created_at BETWEEN :start AND :end',
-        {
-          user_id: user.id,
-          status: 1,
-          start: `${nowDate} 00:00:00`,
-          end: `${nowDate} 23:59:59`
-        }
-      )
-      .getOne()
+      .where('j.user_id = :user_id AND j.created_at BETWEEN :start AND :end', {
+        user_id: user.id,
+        start: `${nowDate} 00:00:00`,
+        end: `${nowDate} 23:59:59`
+      })
+      .getMany()
+
+    const complete = _.remove(allActivedMissions, {
+      status: JoinMissionStatus.COMPLETE
+    })
+
+    const activedMission = _.get(allActivedMissions, '0', null)
 
     const actived = activedMission
       ? {
@@ -168,16 +172,22 @@ export class MissionService {
           sign_in_time: moment(activedMission.sign_in_time).format(
             'YYYY-MM-DD HH:mm:ss'
           ),
+          sign_out_time: moment(activedMission.sign_out_time).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
           submission_id:
             activedMission.submission_id.length > 0
-              ? _.split(activedMission.submission_id, ',')
+              ? _.map(_.split(activedMission.submission_id, ','), (id) =>
+                  _.parseInt(id)
+                )
               : []
         }
       : null
 
     return {
       lists,
-      actived
+      actived,
+      complete
     }
   }
 

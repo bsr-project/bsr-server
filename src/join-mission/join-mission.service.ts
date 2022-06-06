@@ -33,6 +33,15 @@ export class JoinMissionService {
       throw new HttpException('当前还有未签退的任务', HttpStatus.OK)
     }
 
+    const completeMissionCount = await this.joinMissionRepository.countBy({
+      mission_id: createJoinMissionDto.mission_id,
+      status: JoinMissionStatus.COMPLETE
+    })
+
+    if (completeMissionCount > 0) {
+      throw new HttpException('当前任务已完成', HttpStatus.OK)
+    }
+
     const missionCount = await this.missionRepository.countBy({
       mission_pid: createJoinMissionDto.mission_id
     })
@@ -114,7 +123,7 @@ export class JoinMissionService {
         'j.user_id = :user_id AND status = :status AND j.created_at BETWEEN :start AND :end',
         {
           user_id: user.id,
-          status: 1,
+          status: JoinMissionStatus.SIGN_IN,
           start: `${nowDate} 00:00:00`,
           end: `${nowDate} 23:59:59`
         }
