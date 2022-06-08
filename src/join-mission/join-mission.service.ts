@@ -6,10 +6,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { CreateJoinMissionDto } from './dto/create-join-mission.dto'
-import { UpdateJoinMissionDto } from './dto/update-join-mission.dto'
 import { JoinMission } from './entities/join-mission.entity'
 import { JoinMissionStatus } from './enums/JoinMissionStatusEnums'
-import { User } from '@/user/entities/user.entity'
 
 @Injectable()
 export class JoinMissionService {
