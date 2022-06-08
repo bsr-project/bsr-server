@@ -7,5 +7,6 @@ export class CreateJoinMissionDto {
   sign_out_time?: string
   vehicle: number
   custom_vehicle: string
+  datetime: string
   create_type: number
 }

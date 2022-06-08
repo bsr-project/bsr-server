@@ -58,7 +58,7 @@ export class JoinMissionService {
       mission_id: createJoinMissionDto.mission_id,
       submission_id: _.join(createJoinMissionDto.submission_id, ','),
       user_id: user.id,
-      sign_in_time: now,
+      sign_in_time: createJoinMissionDto.datetime,
       sign_in_vehicle: createJoinMissionDto.vehicle,
       sign_in_custom_vehicle: createJoinMissionDto.custom_vehicle,
       create_type: createJoinMissionDto.create_type,
@@ -98,7 +98,7 @@ export class JoinMissionService {
         status: JoinMissionStatus.COMPLETE,
         sign_out_vehicle: createJoinMissionDto.vehicle,
         sign_out_custom_vehicle: createJoinMissionDto.custom_vehicle,
-        sign_out_time: now,
+        sign_out_time: createJoinMissionDto.datetime,
         updated_at: now
       }
     )
