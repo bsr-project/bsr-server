@@ -150,7 +150,6 @@ export class MissionService {
         'j.submission_id',
         'j.sign_in_time',
         'j.sign_out_time',
-        'j.vehicle',
         'j.status'
       ])
       .where('j.user_id = :user_id AND j.created_at BETWEEN :start AND :end', {

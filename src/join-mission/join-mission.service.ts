@@ -60,6 +60,8 @@ export class JoinMissionService {
       submission_id: _.join(createJoinMissionDto.submission_id, ','),
       user_id: user.id,
       sign_in_time: now,
+      sign_in_vehicle: createJoinMissionDto.vehicle,
+      sign_in_custom_vehicle: createJoinMissionDto.custom_vehicle,
       create_type: createJoinMissionDto.create_type,
       status: JoinMissionStatus.SIGN_IN,
       created_at: now,
@@ -74,9 +76,12 @@ export class JoinMissionService {
    * @param user
    * @param mission_id
    */
-  async signOut(user: AuthUser, mission_id: number) {
+  async signOut(user: AuthUser, createJoinMissionDto: CreateJoinMissionDto) {
     // 查找是否已签到
-    const joinedMission = await this.findOne(user, mission_id)
+    const joinedMission = await this.findOne(
+      user,
+      createJoinMissionDto.mission_id
+    )
 
     if (joinedMission.length === 0) {
       throw new HttpException('您没有参加当前任务', HttpStatus.OK)
@@ -87,11 +92,13 @@ export class JoinMissionService {
     // 更新签退时间
     this.joinMissionRepository.update(
       {
-        mission_id,
+        mission_id: createJoinMissionDto.mission_id,
         user_id: user.id
       },
       {
         status: JoinMissionStatus.COMPLETE,
+        sign_out_vehicle: createJoinMissionDto.vehicle,
+        sign_out_custom_vehicle: createJoinMissionDto.custom_vehicle,
         sign_out_time: now,
         updated_at: now
       }
