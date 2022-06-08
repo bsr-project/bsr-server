@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import { Mission } from '@/mission/entities/mission.entity'
+import { User } from '@/user/entities/user.entity'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  OneToOne
+} from 'typeorm'
 
 @Entity({ name: 'bsr_join_mission' })
 export class JoinMission {
@@ -10,7 +18,8 @@ export class JoinMission {
   /**
    * 任务ID
    */
-  @Column({ type: 'int', width: 11, default: 0, comment: '任务ID' })
+  @OneToOne(() => Mission)
+  @JoinColumn({ name: 'mission_id' })
   mission_id: number
 
   /**
@@ -27,11 +36,12 @@ export class JoinMission {
   /**
    * 用户ID
    */
-  @Column({ type: 'int', width: 11, default: 0, comment: '用户ID' })
+  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id' })
   user_id: number
 
   /**
-   * 交通工具
+   * 出发交通工具
    */
   @Column({
     type: 'int',
@@ -39,7 +49,7 @@ export class JoinMission {
     default: 0,
     comment: '交通工具 0-自定义 1-开车 2-步行 3-骑车 4-打车 5-乘地铁 6-乘公交'
   })
-  vehicle: number
+  sign_in_vehicle: number
 
   @Column({
     type: 'varchar',
@@ -47,7 +57,26 @@ export class JoinMission {
     nullable: true,
     comment: '自定义交通工具名称'
   })
-  custom_vehicle: string
+  sign_in_custom_vehicle: string
+
+  /**
+   * 回家交通工具
+   */
+  @Column({
+    type: 'int',
+    width: 2,
+    default: 0,
+    comment: '交通工具 0-自定义 1-开车 2-步行 3-骑车 4-打车 5-乘地铁 6-乘公交'
+  })
+  sign_out_vehicle: number
+
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    comment: '自定义交通工具名称'
+  })
+  sign_out_custom_vehicle: string
 
   /**
    * 签到时间

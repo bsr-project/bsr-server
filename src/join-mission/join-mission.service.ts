@@ -9,6 +9,7 @@ import { CreateJoinMissionDto } from './dto/create-join-mission.dto'
 import { UpdateJoinMissionDto } from './dto/update-join-mission.dto'
 import { JoinMission } from './entities/join-mission.entity'
 import { JoinMissionStatus } from './enums/JoinMissionStatusEnums'
+import { User } from '@/user/entities/user.entity'
 
 @Injectable()
 export class JoinMissionService {
@@ -107,10 +108,6 @@ export class JoinMissionService {
     return null
   }
 
-  findAll() {
-    return `This action returns all joinMission`
-  }
-
   // 查找进行中的任务（未签退的任务）
   async findActivedMission(user: AuthUser) {
     const nowDate = moment().format('YYYY-MM-DD')
@@ -160,11 +157,35 @@ export class JoinMissionService {
     return joinedMission
   }
 
-  update(id: number, updateJoinMissionDto: UpdateJoinMissionDto) {
-    return `This action updates a #${id} joinMission`
-  }
+  /**
+   * 根据任务ID获取所有签到签退
+   * @param mission_id
+   * @returns
+   */
+  async findAllByMissionId(mission_id: number) {
+    const joinMissionList = await this.joinMissionRepository
+      .createQueryBuilder('j')
+      .leftJoinAndSelect('j.user_id', 'u')
+      .select([
+        'j.join_id',
+        'j.mission_id',
+        'j.submission_id',
+        'j.sign_in_time',
+        'j.sign_out_time',
+        'j.status',
+        'j.sign_in_vehicle',
+        'j.sign_in_custom_vehicle',
+        'j.sign_out_vehicle',
+        'j.sign_out_custom_vehicle',
+        'u.realname',
+        'u.bsr_code',
+        'u.car_number'
+      ])
+      .where('j.mission_id = :mission_id', {
+        mission_id
+      })
+      .getMany()
 
-  remove(id: number) {
-    return `This action removes a #${id} joinMission`
+    return joinMissionList
   }
 }
