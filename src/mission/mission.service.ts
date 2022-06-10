@@ -183,6 +183,15 @@ export class MissionService {
         }
       : null
 
+    // 构造 complete 数据
+    _.forEach(complete, (item) => {
+      item.submission_id = (
+        !_.isEmpty(item.submission_id)
+          ? _.split(item.submission_id, ',').map((v) => _.parseInt(v))
+          : []
+      ) as any
+    })
+
     return {
       lists,
       actived,
