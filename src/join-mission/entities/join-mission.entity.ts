@@ -19,8 +19,6 @@ export class JoinMission {
    * 任务ID
    */
   @Column({ type: 'int', width: 11, default: 0, comment: '任务ID' })
-  @OneToOne(() => Mission)
-  @JoinColumn()
   mission_id: number
 
   /**
@@ -38,9 +36,11 @@ export class JoinMission {
    * 用户ID
    */
   @Column({ type: 'int', width: 11, default: 0, comment: '用户ID' })
+  user_id: number
+
   @OneToOne(() => User)
   @JoinColumn()
-  user_id: number
+  join_user_id: number
 
   /**
    * 出发交通工具

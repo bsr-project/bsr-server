@@ -163,7 +163,7 @@ export class JoinMissionService {
   async findAllByMissionId(mission_id: number) {
     const joinMissionList = await this.joinMissionRepository
       .createQueryBuilder('j')
-      .leftJoinAndSelect('j.user_id', 'u')
+      .leftJoinAndSelect('j.join_user_id', 'u')
       .select([
         'j.join_id',
         'j.mission_id',
