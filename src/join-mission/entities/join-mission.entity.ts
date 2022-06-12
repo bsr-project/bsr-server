@@ -1,4 +1,3 @@
-import { Mission } from '@/mission/entities/mission.entity'
 import { User } from '@/user/entities/user.entity'
 import {
   Entity,
