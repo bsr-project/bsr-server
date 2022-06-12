@@ -234,7 +234,7 @@ export class MissionService {
 
     if (deleteSubMission.length > 0) {
       for await (const mission_id of deleteSubMission) {
-        this.missionRepository.delete({ mission_id })
+        this.missionRepository.softDelete({ mission_id })
       }
     }
 
@@ -248,11 +248,11 @@ export class MissionService {
 
     // 删除子任务
     for await (const mission of missionList) {
-      this.missionRepository.delete({ mission_id: mission.mission_id })
+      this.missionRepository.softDelete({ mission_id: mission.mission_id })
     }
 
     // 删除主任务
-    this.missionRepository.delete({ mission_id: id })
+    this.missionRepository.softDelete({ mission_id: id })
 
     return null
   }

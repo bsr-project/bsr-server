@@ -3,7 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  DeleteDateColumn
 } from 'typeorm'
 
 @Entity({ name: 'bsr_admin' })
@@ -35,4 +36,10 @@ export class Admin {
    */
   @UpdateDateColumn({ type: 'datetime', comment: '最后更新时间' })
   updated_at: Date
+
+  /**
+   * 删除时间
+   */
+  @DeleteDateColumn({ type: 'datetime', comment: '删除时间' })
+  deleted_at: Date
 }

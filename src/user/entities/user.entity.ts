@@ -3,7 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  DeleteDateColumn
 } from 'typeorm'
 
 @Entity({ name: 'bsr_user' })
@@ -58,4 +59,10 @@ export class User {
    */
   @UpdateDateColumn({ type: 'datetime', comment: '最后更新时间' })
   updated_at: Date
+
+  /**
+   * 删除时间
+   */
+  @DeleteDateColumn({ type: 'datetime', comment: '删除时间' })
+  deleted_at: Date
 }
