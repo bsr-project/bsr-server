@@ -33,7 +33,7 @@ export class MissionService {
       const mission_id = _.get(result.identifiers, '0.mission_id')
       for await (const item of createMissionDto.children as CreateMissionDto[]) {
         item.mission_pid = mission_id
-        this.missionRepository.insert(item)
+        await this.missionRepository.insert(item)
       }
     }
 
@@ -217,7 +217,7 @@ export class MissionService {
     const createSubMission = _.get(children, 'create', [] as CreateMissionDto[])
 
     if (createSubMission.length > 0) {
-      this.missionRepository.insert(createSubMission)
+      await this.missionRepository.insert(createSubMission)
     }
 
     // 子任务 更新
@@ -225,7 +225,10 @@ export class MissionService {
 
     if (updateSubMission.length > 0) {
       for await (const item of updateSubMission) {
-        this.missionRepository.update({ mission_id: item.mission_id }, item)
+        await this.missionRepository.update(
+          { mission_id: item.mission_id },
+          item
+        )
       }
     }
 
@@ -234,7 +237,7 @@ export class MissionService {
 
     if (deleteSubMission.length > 0) {
       for await (const mission_id of deleteSubMission) {
-        this.missionRepository.softDelete({ mission_id })
+        await this.missionRepository.softDelete({ mission_id })
       }
     }
 
@@ -248,11 +251,13 @@ export class MissionService {
 
     // 删除子任务
     for await (const mission of missionList) {
-      this.missionRepository.softDelete({ mission_id: mission.mission_id })
+      await this.missionRepository.softDelete({
+        mission_id: mission.mission_id
+      })
     }
 
     // 删除主任务
-    this.missionRepository.softDelete({ mission_id: id })
+    await this.missionRepository.softDelete({ mission_id: id })
 
     return null
   }
