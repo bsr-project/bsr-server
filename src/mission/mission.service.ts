@@ -171,9 +171,9 @@ export class MissionService {
           sign_in_time: moment(activedMission.sign_in_time).format(
             'YYYY-MM-DD HH:mm:ss'
           ),
-          sign_out_time: moment(activedMission.sign_out_time).format(
-            'YYYY-MM-DD HH:mm:ss'
-          ),
+          sign_out_time: activedMission.sign_out_time
+            ? moment(activedMission.sign_out_time).format('YYYY-MM-DD HH:mm:ss')
+            : null,
           submission_id:
             activedMission.submission_id.length > 0
               ? _.map(_.split(activedMission.submission_id, ','), (id) =>
