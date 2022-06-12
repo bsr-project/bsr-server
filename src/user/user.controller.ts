@@ -33,15 +33,15 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Request() req) {
+  @Get('info')
+  getUserInfo(@Request() req) {
     const id = _.get(req.user, 'id')
 
     if (!id) {
       throw new HttpException('未知错误 user', HttpStatus.OK)
     }
 
-    return this.userService.findOne(id)
+    return this.userService.getUserInfo(id)
   }
 
   @UseGuards(JwtAuthGuard)

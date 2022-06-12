@@ -47,7 +47,7 @@ export class UserService {
     }
   }
 
-  findOne(id: number) {
+  getUserInfo(id: number) {
     return this.userRepository.findOne({
       select: [
         'id',
