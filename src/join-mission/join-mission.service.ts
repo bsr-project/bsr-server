@@ -33,6 +33,7 @@ export class JoinMissionService {
     }
 
     const completeMissionCount = await this.joinMissionRepository.countBy({
+      user_id: user.id,
       mission_id: createJoinMissionDto.mission_id,
       status: JoinMissionStatus.COMPLETE
     })
@@ -82,8 +83,6 @@ export class JoinMissionService {
     if (joinedMission.length === 0) {
       throw new HttpException('您没有参加当前任务', HttpStatus.OK)
     }
-
-    const now = moment().format('YYYY-MM-DD HH:mm:ss')
 
     // 更新签退时间
     this.joinMissionRepository.update(
