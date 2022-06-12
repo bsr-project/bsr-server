@@ -5,7 +5,9 @@ import {
   Column,
   PrimaryGeneratedColumn,
   JoinColumn,
-  OneToOne
+  OneToOne,
+  UpdateDateColumn,
+  CreateDateColumn
 } from 'typeorm'
 
 @Entity({ name: 'bsr_join_mission' })
@@ -111,12 +113,12 @@ export class JoinMission {
   /**
    * 创建时间
    */
-  @Column({ type: 'datetime', comment: '创建时间' })
+  @CreateDateColumn({ type: 'datetime', comment: '创建时间' })
   created_at: Date
 
   /**
    * 最后更新时间
    */
-  @Column({ type: 'datetime', comment: '最后更新时间' })
+  @UpdateDateColumn({ type: 'datetime', comment: '最后更新时间' })
   updated_at: Date
 }

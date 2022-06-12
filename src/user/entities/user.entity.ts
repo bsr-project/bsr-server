@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn
+} from 'typeorm'
 
 @Entity({ name: 'bsr_user' })
 export class User {
@@ -44,12 +50,12 @@ export class User {
   /**
    * 创建时间
    */
-  @Column({ type: 'datetime', comment: '创建时间' })
-  created_at: string
+  @CreateDateColumn({ type: 'datetime', comment: '创建时间' })
+  created_at: Date
 
   /**
    * 最后更新时间
    */
-  @Column({ type: 'datetime', comment: '最后更新时间' })
-  updated_at: string
+  @UpdateDateColumn({ type: 'datetime', comment: '最后更新时间' })
+  updated_at: Date
 }

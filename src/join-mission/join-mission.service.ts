@@ -63,9 +63,7 @@ export class JoinMissionService {
       sign_in_vehicle: createJoinMissionDto.vehicle,
       sign_in_custom_vehicle: createJoinMissionDto.custom_vehicle,
       create_type: createJoinMissionDto.create_type,
-      status: JoinMissionStatus.SIGN_IN,
-      created_at: now,
-      updated_at: now
+      status: JoinMissionStatus.SIGN_IN
     })
 
     return null
@@ -99,8 +97,7 @@ export class JoinMissionService {
         status: JoinMissionStatus.COMPLETE,
         sign_out_vehicle: createJoinMissionDto.vehicle,
         sign_out_custom_vehicle: createJoinMissionDto.custom_vehicle,
-        sign_out_time: createJoinMissionDto.datetime,
-        updated_at: now
+        sign_out_time: createJoinMissionDto.datetime
       }
     )
 

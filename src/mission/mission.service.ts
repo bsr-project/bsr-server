@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import {
   FindOptionsSelect,
@@ -217,11 +217,6 @@ export class MissionService {
     const createSubMission = _.get(children, 'create', [] as CreateMissionDto[])
 
     if (createSubMission.length > 0) {
-      const date = moment().format('YYYY-MM-DD HH:mm:ss')
-      _.forEach(createSubMission, (item) => {
-        item.created_at = date
-        item.updated_at = date
-      })
       this.missionRepository.insert(createSubMission)
     }
 
