@@ -5,10 +5,10 @@ import {
   Column,
   PrimaryGeneratedColumn,
   JoinColumn,
-  OneToOne,
   UpdateDateColumn,
   CreateDateColumn,
-  DeleteDateColumn
+  DeleteDateColumn,
+  ManyToOne
 } from 'typeorm'
 
 @Entity({ name: 'bsr_join_mission' })
@@ -41,9 +41,9 @@ export class JoinMission {
   @Column({ type: 'int', width: 11, default: 0, comment: '用户ID' })
   user_id: number
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User, (user) => user.join_missions)
   @JoinColumn()
-  join_user_id: number
+  user: number
 
   /**
    * 出发交通工具

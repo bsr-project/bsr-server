@@ -1,10 +1,12 @@
+import { JoinMission } from '@/join-mission/entities/join-mission.entity'
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn
+  DeleteDateColumn,
+  OneToMany
 } from 'typeorm'
 
 @Entity({ name: 'bsr_user' })
@@ -47,6 +49,9 @@ export class User {
    */
   @Column({ type: 'varchar', length: 20, nullable: true, comment: '车牌号' })
   car_number: string
+
+  @OneToMany(() => JoinMission, (joinMission) => joinMission.user)
+  join_missions: JoinMission[]
 
   /**
    * 创建时间

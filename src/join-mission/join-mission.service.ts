@@ -52,13 +52,11 @@ export class JoinMissionService {
       throw new HttpException('请选择子任务', HttpStatus.OK)
     }
 
-    const now = moment().format('YYYY-MM-DD HH:mm:ss')
-
     this.joinMissionRepository.insert({
       mission_id: createJoinMissionDto.mission_id,
       submission_id: _.join(createJoinMissionDto.submission_id, ','),
       user_id: user.id,
-      join_user_id: user.id,
+      user: user.id,
       sign_in_time: createJoinMissionDto.datetime,
       sign_in_vehicle: createJoinMissionDto.vehicle,
       sign_in_custom_vehicle: createJoinMissionDto.custom_vehicle,
@@ -161,7 +159,7 @@ export class JoinMissionService {
   async findAllByMissionId(mission_id: number) {
     const joinMissionList = await this.joinMissionRepository
       .createQueryBuilder('j')
-      .leftJoinAndSelect('j.join_user_id', 'u')
+      .leftJoinAndSelect('j.user', 'u')
       .select([
         'j.join_id',
         'j.mission_id',
