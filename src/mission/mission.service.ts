@@ -59,7 +59,10 @@ export class MissionService {
 
     const [lists, count] = await this.missionRepository.findAndCount({
       select,
-      where
+      where,
+      order: {
+        action_date: 'DESC'
+      }
     })
 
     // 取出子级
