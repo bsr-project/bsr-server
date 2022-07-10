@@ -17,7 +17,7 @@ import { AdminModule } from '@/admin/admin.module'
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: {
-        expiresIn: '1d'
+        expiresIn: '30d'
       }
     })
   ],
