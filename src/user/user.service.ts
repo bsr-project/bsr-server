@@ -7,6 +7,7 @@ import { Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from './entities/user.entity'
+import { QueryUserListParams } from './interfaces/user'
 
 @Injectable()
 export class UserService {
@@ -37,8 +38,15 @@ export class UserService {
   }
 
   async findAll(
-    query: { page: number; limit: number } = { page: 1, limit: 20 }
+    query: QueryUserListParams = { page: 1, limit: 20, realname: '' }
   ) {
+    const where =
+      _.get(query, 'realname', '').trim() !== ''
+        ? {
+            realname: query.realname
+          }
+        : {}
+
     const [lists, count] = await this.userRepository.findAndCount({
       select: [
         'id',
@@ -48,6 +56,7 @@ export class UserService {
         'car_number',
         'mobile'
       ],
+      where,
       skip: query.limit * (query.page - 1),
       take: query.limit
     })
