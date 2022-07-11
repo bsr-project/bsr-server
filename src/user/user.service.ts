@@ -36,9 +36,20 @@ export class UserService {
     })
   }
 
-  async findAll() {
+  async findAll(
+    query: { page: number; limit: number } = { page: 1, limit: 20 }
+  ) {
     const [lists, count] = await this.userRepository.findAndCount({
-      select: ['id', 'username', 'realname', 'bsr_code', 'car_number', 'mobile']
+      select: [
+        'id',
+        'username',
+        'realname',
+        'bsr_code',
+        'car_number',
+        'mobile'
+      ],
+      skip: query.limit * (query.page - 1),
+      take: query.limit
     })
 
     return {

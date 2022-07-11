@@ -40,7 +40,7 @@ export class MissionService {
     return result.identifiers
   }
 
-  async findAll() {
+  async findAll(query: { page: number; limit: number }) {
     const where = { mission_pid: 0 }
 
     const select:
@@ -62,7 +62,9 @@ export class MissionService {
       where,
       order: {
         action_date: 'DESC'
-      }
+      },
+      skip: query.limit * (query.page - 1),
+      take: query.limit
     })
 
     // 取出子级

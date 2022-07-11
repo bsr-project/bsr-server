@@ -7,7 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
-  Request
+  Request,
+  Query
 } from '@nestjs/common'
 import { MissionService } from './mission.service'
 import { CreateMissionDto } from './dto/create-mission.dto'
@@ -26,8 +27,8 @@ export class MissionController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.missionService.findAll()
+  findAll(@Query() query) {
+    return this.missionService.findAll(query)
   }
 
   @UseGuards(JwtAuthGuard)
